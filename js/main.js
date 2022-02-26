@@ -99,18 +99,23 @@ $('document').ready(function () {
 
     $('#convert_binary_to_denary').on('click', function () {
 
-        $('#binary_simulation').html('')
-        $('#convert_binary_to_denary').attr('disabled', true)
-        $('#binary_to_denary').attr('disabled', true)
-
         var binary_value = $('#binary_to_denary').val()
         var base_from = 2
         var base_to = 10
         var convert_length = binary_value.length
 
-        setTimeout(function () {
-            convert_numbers(binary_value, base_from, base_to, convert_length, 0)
-        }, 400)
+        if (binary_value == '' || binary_value == NaN || binary_value == ' ') {
+            alert('Please Input Binary Numbers')
+        } else {
+
+            $('#binary_simulation').html('')
+            $('#convert_binary_to_denary').attr('disabled', true)
+            $('#binary_to_denary').attr('disabled', true)
+            setTimeout(function () {
+                convert_numbers(binary_value, base_from, base_to, convert_length, 0)
+            }, 400)
+
+        }
 
         return false
 
@@ -119,6 +124,7 @@ $('document').ready(function () {
     $('#Reset').on('click', function () {
         $('#convert_binary_to_denary').removeAttr('disabled')
         $('#binary_to_denary').val('')
+        $('#binary_to_denary').focus('')
         $('#binary_to_denary').removeAttr('disabled')
     })
 
