@@ -87,6 +87,10 @@ body main button {
     font-weight: bold;
 }
 
+.binary_conversion .simulation.text-right {
+    text-align: right;
+}
+
 .binary_conversion .simulation::-webkit-scrollbar {
     width: 2px;
 }

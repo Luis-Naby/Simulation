@@ -1,6 +1,7 @@
 conversion_save_text = '';
 working_conversion_text = '';
 last_working_convert = '';
+remainder_binary_add = 0;
 
 function convert_numbers(convert_value, base_from, base_to, convert_length, current_index) {
 
@@ -90,11 +91,158 @@ function last_convert_step() {
     $('#binary_simulation').append("= " + total_add)
 }
 
+function add_numbers(first, second, first_length, second_length, current_index) {
+
+    if (first_length > current_index) {
+
+        if (second_length > current_index) {
+            var current_sum = Number(first[first_length - current_index - 1]) + Number(second[second_length - current_index - 1])
+            if (current_sum > 1) {
+
+                if (++remainder_binary_add > 1) {
+                    $('#binary_simulation').append('1 ')
+                    remainder_binary_add--
+                } else {
+                    $('#binary_simulation').append('0 ')
+                }
+
+            } else {
+                if (remainder_binary_add > 1) {
+                    $('#binary_simulation').append('1 ')
+                    remainder_binary_add--
+                } else {
+                    $('#binary_simulation').append(current_sum + ' ')
+                }
+            }
+        } else {
+
+        }
+        setTimeout(function () {
+            add_numbers(first, second, first_length, second_length, ++current_index)
+        }, 400)
+    } else {
+
+    }
+
+}
+
+function halfAdder(a, b) {
+    const sum = xor(a, b);
+    const carry = and(a, b);
+    return [sum, carry];
+}
+
+function fullAdder(a, b, carry) {
+    halfAdd = halfAdder(a, b);
+    const sum = xor(carry, halfAdd[0]);
+    carry = and(carry, halfAdd[0]);
+    carry = or(carry, halfAdd[1]);
+    return [sum, carry];
+}
+
+function xor(a, b) {
+    return (a === b ? 0 : 1);
+}
+
+function and(a, b) {
+    return a == 1 && b == 1 ? 1 : 0;
+}
+
+function or(a, b) {
+    return (a || b);
+}
+
+function addBinary(a, b) {
+
+    let sum = '';
+    let carry = '';
+
+    for (var i = a.length - 1; i >= 0; i--) {
+        if (i == a.length - 1) {
+            //half add the first pair
+            const halfAdd1 = halfAdder(a[i], b[i]);
+            sum = halfAdd1[0] + sum;
+            carry = halfAdd1[1];
+        } else {
+            //full add the rest
+            const fullAdd = fullAdder(a[i], b[i], carry);
+            sum = fullAdd[0] + sum;
+            carry = fullAdd[1];
+        }
+    }
+
+    return carry ? carry + sum : sum;
+}
+
 
 $('document').ready(function () {
 
     $('#binary_to_denary').on('input', function (e) {
         e.target.value = e.target.value.replace(/[^0-1]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
+    $('#binary1').on('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-1]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
+    $('#binary2').on('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-1]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
+    $('#add_binary_numbers').on('click', function () {
+
+        var binary1 = $('#binary1').val()
+        var binary2 = $('#binary2').val()
+        var binary1_length = binary1.length
+        var binary2_length = binary2.length
+
+        if (binary1 == '' || binary1 == NaN || binary1 == ' ' || binary2 == '' || binary2 == NaN || binary2 == ' ') {
+            alert('Please Input Binary Numbers')
+        } else {
+
+            first = binary1.split('')
+            second = binary2.split('')
+
+            $('#binary_simulation').html('&nbsp;&nbsp;&nbsp;&nbsp;')
+
+            for (var fl = 0; fl < binary1_length; fl++) {
+                $('#binary_simulation').append(binary1[fl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br>+ ')
+
+            for (var sl = 0; sl < binary2_length; sl++) {
+                $('#binary_simulation').append(binary2[sl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br> ')
+
+
+            $('#add_binary_numbers').attr('disabled', true)
+            $('#binary1').attr('disabled', true)
+            $('#binary2').attr('disabled', true)
+            setTimeout(function () {
+                $('#binary_simulation').append('----')
+                if (binary1_length >= binary2_length) {
+                    for (var fl = 0; fl < binary1_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    Added_Binary = addBinary(binary1, binary2)
+                } else if (binary1_length < binary2_length) {
+                    for (var fl = 0; fl < binary2_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    Added_Binary = addBinary(binary2, binary1)
+                }
+                Added_Binary = Added_Binary.split('')
+                Added_Binary = Added_Binary.join(" ")
+                $('#binary_simulation').append(Added_Binary)
+            }, 400)
+
+        }
+
     })
 
     $('#convert_binary_to_denary').on('click', function () {
@@ -108,7 +256,6 @@ $('document').ready(function () {
             alert('Please Input Binary Numbers')
         } else {
 
-            $('#binary_simulation').html('')
             $('#convert_binary_to_denary').attr('disabled', true)
             $('#binary_to_denary').attr('disabled', true)
             setTimeout(function () {
@@ -124,8 +271,13 @@ $('document').ready(function () {
     $('#Reset').on('click', function () {
         $('#convert_binary_to_denary').removeAttr('disabled')
         $('#binary_to_denary').val('')
-        $('#binary_to_denary').focus('')
         $('#binary_to_denary').removeAttr('disabled')
+        $('#add_binary_numbers').removeAttr('disabled')
+        $('#binary1').removeAttr('disabled')
+        $('#binary2').removeAttr('disabled')
+        $('#binary1').val('')
+        $('#binary2').val('')
+        $('#binary_simulation').html('')
     })
 
 })
