@@ -90,6 +90,10 @@ function last_convert_step() {
 
 $('document').ready(function () {
 
+    $('#binary_to_denary').on('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-1]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
     $('#convert_binary_to_denary').on('click', function () {
 
         $('#binary_simulation').html('')
