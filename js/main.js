@@ -93,6 +93,7 @@ $('document').ready(function () {
     $('#convert_binary_to_denary').on('click', function () {
 
         $('#convert_binary_to_denary').attr('disabled', true)
+        $('#binary_to_denary').attr('disabled', true)
 
         var binary_value = $('#binary_to_denary').val()
         var base_from = 2
@@ -105,6 +106,11 @@ $('document').ready(function () {
 
         return false
 
+    })
+
+    $('#Reset').on('click', function () {
+        $('#convert_binary_to_denary').removeAttr('disabled')
+        $('#binary_to_denary').removeAttr('readonly')
     })
 
 })
