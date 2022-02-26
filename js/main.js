@@ -92,6 +92,7 @@ $('document').ready(function () {
 
     $('#convert_binary_to_denary').on('click', function () {
 
+        $('#binary_simulation').html('')
         $('#convert_binary_to_denary').attr('disabled', true)
         $('#binary_to_denary').attr('disabled', true)
 
@@ -109,8 +110,9 @@ $('document').ready(function () {
     })
 
     $('#Reset').on('click', function () {
+        console.log('aaaa')
         $('#convert_binary_to_denary').removeAttr('disabled')
-        $('#binary_to_denary').removeAttr('readonly')
+        $('#binary_to_denary').removeAttr('disabled')
     })
 
 })
