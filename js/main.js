@@ -20,6 +20,7 @@ function convert_numbers(convert_value, base_from, base_to, convert_length, curr
         }, 400)
     } else {
         $('#binary_simulation').append("<br>")
+        $('#binary_simulation').append("<br>")
         conversion_save_text = conversion_save_text.split(" + ")
         setTimeout(function () {
             continue_conversion(conversion_save_text.length, 0)
@@ -48,6 +49,7 @@ function continue_conversion(working_length, current_index) {
         }, 400)
     } else {
         $('#binary_simulation').append("<br>")
+        $('#binary_simulation').append("<br>")
         working_conversion_text = working_conversion_text.split(" + ")
         setTimeout(function () {
             conversion_last_step(working_conversion_text.length, 0)
@@ -73,6 +75,7 @@ function conversion_last_step(working_length, current_index) {
             conversion_last_step(working_conversion_text.length, ++current_index)
         }, 400)
     } else {
+        $('#binary_simulation').append("<br>")
         $('#binary_simulation').append("<br>")
         setTimeout(last_convert_step, 300)
     }
@@ -114,8 +117,8 @@ $('document').ready(function () {
     })
 
     $('#Reset').on('click', function () {
-        console.log('aaaa')
         $('#convert_binary_to_denary').removeAttr('disabled')
+        $('#binary_to_denary').val('')
         $('#binary_to_denary').removeAttr('disabled')
     })
 
