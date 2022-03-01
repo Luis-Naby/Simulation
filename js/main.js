@@ -189,6 +189,18 @@ $('document').ready(function () {
         e.target.value = e.target.value.replace(/[^0-1]/g, '').replace(/(.{4})/g, '$1 ').trim();
     })
 
+    $('#octa_to_denary').on('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-7]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
+    $('#octal1').on('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-7]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
+    $('#octal2').on('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-7]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
     $('#add_binary_numbers').on('click', function () {
 
         var binary1 = $('#binary1').val()
@@ -245,6 +257,62 @@ $('document').ready(function () {
 
     })
 
+    $('#add_octal_numbers').on('click', function () {
+
+        var binary1 = $('#octal1').val()
+        var binary2 = $('#octal2').val()
+        var binary1_length = binary1.length
+        var binary2_length = binary2.length
+
+        if (binary1 == '' || binary1 == NaN || binary1 == ' ' || binary2 == '' || binary2 == NaN || binary2 == ' ') {
+            alert('Please Input Octal Numbers')
+        } else {
+
+            first = binary1.split('')
+            second = binary2.split('')
+
+            $('#binary_simulation').html('&nbsp;&nbsp;&nbsp;&nbsp;')
+
+            for (var fl = 0; fl < binary1_length; fl++) {
+                $('#binary_simulation').append(binary1[fl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br>+ ')
+
+            for (var sl = 0; sl < binary2_length; sl++) {
+                $('#binary_simulation').append(binary2[sl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br> ')
+
+
+            $('#add_octal_numbers').attr('disabled', true)
+            $('#octal1').attr('disabled', true)
+            $('#octal2').attr('disabled', true)
+            setTimeout(function () {
+                $('#binary_simulation').append('----')
+                if (binary1_length >= binary2_length) {
+                    for (var fl = 0; fl < binary1_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    Added_Binary = addBinary(binary1, binary2)
+                } else if (binary1_length < binary2_length) {
+                    for (var fl = 0; fl < binary2_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    Added_Binary = addBinary(binary2, binary1)
+                }
+                Added_Binary = Added_Binary.split('')
+                Added_Binary = Added_Binary.join(" ")
+                $('#binary_simulation').append(Added_Binary)
+            }, 400)
+
+        }
+
+    })
+
     $('#convert_binary_to_denary').on('click', function () {
 
         var binary_value = $('#binary_to_denary').val()
@@ -268,6 +336,29 @@ $('document').ready(function () {
 
     })
 
+    $('#convert_octa_to_denary').on('click', function () {
+
+        var binary_value = $('#octa_to_denary').val()
+        var base_from = 8
+        var base_to = 10
+        var convert_length = binary_value.length
+
+        if (binary_value == '' || binary_value == NaN || binary_value == ' ') {
+            alert('Please Input Octa Numbers')
+        } else {
+
+            $('#convert_octa_to_denary').attr('disabled', true)
+            $('#octa_to_denary').attr('disabled', true)
+            setTimeout(function () {
+                convert_numbers(binary_value, base_from, base_to, convert_length, 0)
+            }, 400)
+
+        }
+
+        return false
+
+    })
+
     $('#Reset').on('click', function () {
         $('#convert_binary_to_denary').removeAttr('disabled')
         $('#binary_to_denary').val('')
@@ -278,6 +369,16 @@ $('document').ready(function () {
         $('#binary1').val('')
         $('#binary2').val('')
         $('#binary_simulation').html('')
+        $('#convert_octa_to_denary').removeAttr('disabled')
+        $('#octa_to_denary').removeAttr('disabled')
+        $('#octa_to_denary').val('')
+        $('#add_octal_numbers').removeAttr('disabled')
+        $('#octal1').removeAttr('disabled')
+        $('#octal2').removeAttr('disabled')
+        $('#octal1').val('')
+        $('#octal2').val('')
+
+
     })
 
 })
