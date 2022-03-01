@@ -21,6 +21,7 @@
 
 body {
     background: #ffffff;
+    overflow-x: hidden;
 }
 
 body header {
@@ -43,6 +44,32 @@ body main button {
     margin: 20px auto;
     background: #808080a4;
     padding: 20px;
+}
+
+.link_flex {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 10px 2px;
+    margin: 20px auto;
+    justify-content: space-evenly;
+    background: #777777;
+}
+
+.link_flex a {
+    color: #ffffff;
+    font-size: 18px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.link_flex a:hover {
+    color: firebrick;
+}
+
+.link_flex a::after {
+    content: ' | ';
+    color: #ffffff;
 }
 
 .binary_conversion .input_form {
