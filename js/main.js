@@ -2,6 +2,7 @@ conversion_save_text = '';
 working_conversion_text = '';
 last_working_convert = '';
 remainder_binary_add = 0;
+allmultiply_work = ''
 
 function convert_numbers(convert_value, base_from, base_to, convert_length, current_index) {
 
@@ -174,6 +175,72 @@ function addBinary(a, b) {
     return carry ? carry + sum : sum;
 }
 
+function multiply_sequence(first, second, first_length, second_length, current_index){
+    if(current_index < second_length){
+        var multiplier = second[second_length - current_index - 1]
+        var mutlipli = Number(multiplier * first)
+        mutlipli = ("" + mutlipli).split('')
+        mutlipli = mutlipli.join(" ")
+        if(multiplier == 0){
+            mutlipli = '';
+            for(var li = 0; li < first_length; li++){
+                mutlipli = mutlipli + ' ' + '0'
+            }
+        }
+        for(var i = 0; i < current_index; i++){
+            mutlipli = mutlipli + ' ' + '0'
+        }
+        $('#binary_simulation').append(mutlipli)
+        $('#binary_simulation').append('<br> ')
+        
+        if(current_index == 0){
+            allmultiply_work = allmultiply_work + '' + mutlipli.split(" ").join("")
+        }else{
+            allmultiply_work = allmultiply_work + '+' + mutlipli.split(" ").join("")
+        }
+
+        setTimeout(function(){
+            multiply_sequence(first, second, first_length, second_length, ++current_index)
+        }, 3000)
+    }else{
+        for (var fl = 0; fl < second_length; fl++) {
+            $('#binary_simulation').append('--')
+            $('#binary_simulation').append('--')
+        }
+        $('#binary_simulation').append('<br> ')
+        setTimeout(multiply_add_end, 2000)
+    }
+}
+
+function multiply_add_end(){
+    allmultiply_work = allmultiply_work.split('+')
+    current_total = 0;
+    for(var am = 0; am < allmultiply_work.length; am++){
+        console.log(allmultiply_work)
+        console.log(allmultiply_work[am])
+        console.log(allmultiply_work[Number(am+1)])
+        if(allmultiply_work[am+1] != undefined){
+            if(allmultiply_work[am].length < allmultiply_work[am+1].length){
+                total = addBinary(allmultiply_work[am], allmultiply_work[am+1])
+            }else{
+                total = addBinary(allmultiply_work[am+1], allmultiply_work[am])
+            }
+            if(current_total == 0){
+                current_total = total
+            }else{
+                if(current_total.length < total.length){
+                    current_total = addBinary(current_total, total)
+                }else{
+                    current_total = addBinary(total, current_total)
+                }
+            }
+        }
+    }
+    current_total = ("" + current_total).split('')
+    current_total = current_total.join(" ")
+    $('#binary_simulation').append(current_total)
+}
+
 
 $('document').ready(function () {
 
@@ -313,6 +380,64 @@ $('document').ready(function () {
 
     })
 
+    $('#multiply_binary_numbers').on('click', function () {
+
+        var binary1 = $('#binary1').val()
+        var binary2 = $('#binary2').val()
+        var binary1_length = binary1.length
+        var binary2_length = binary2.length
+
+        if (binary1 == '' || binary1 == NaN || binary1 == ' ' || binary2 == '' || binary2 == NaN || binary2 == ' ') {
+            alert('Please Input Binary Numbers')
+        } else {
+
+            first = binary1.split('')
+            second = binary2.split('')
+
+            $('#binary_simulation').html('&nbsp;&nbsp;&nbsp;&nbsp;')
+
+            for (var fl = 0; fl < binary1_length; fl++) {
+                $('#binary_simulation').append(binary1[fl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br>x ')
+
+            for (var sl = 0; sl < binary2_length; sl++) {
+                $('#binary_simulation').append(binary2[sl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br> ')
+
+
+            $('#multiply_binary_numbers').attr('disabled', true)
+            $('#binary1').attr('disabled', true)
+            $('#binary2').attr('disabled', true)
+            setTimeout(function () {
+                $('#binary_simulation').append('----')
+                if (binary1_length >= binary2_length) {
+                    for (var fl = 0; fl < binary1_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    setTimeout(function(){
+                        multiply_sequence(binary1, binary2, binary1_length, binary2_length, 0)
+                    }, 3000)
+                    
+                } else if (binary1_length < binary2_length) {
+                    for (var fl = 0; fl < binary2_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    setTimeout(function(){
+                        multiply_sequence(binary2, binary1, binary2_length, binary1_length, 0)
+                    }, 3000)
+                }
+            }, 400)
+
+        }
+
+    })
+
     $('#convert_binary_to_denary').on('click', function () {
 
         var binary_value = $('#binary_to_denary').val()
@@ -377,8 +502,9 @@ $('document').ready(function () {
         $('#octal2').removeAttr('disabled')
         $('#octal1').val('')
         $('#octal2').val('')
-
-
+        $('#multiply_binary_numbers').removeAttr('disabled')
+        $('#binary1').removeAttr('disabled')
+        $('#binary2').removeAttr('disabled')
     })
 
 })
