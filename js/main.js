@@ -3,6 +3,7 @@ working_conversion_text = '';
 last_working_convert = '';
 remainder_binary_add = 0;
 allmultiply_work = ''
+binary_pass_out = ''
 
 function convert_numbers(convert_value, base_from, base_to, convert_length, current_index) {
 
@@ -175,34 +176,34 @@ function addBinary(a, b) {
     return carry ? carry + sum : sum;
 }
 
-function multiply_sequence(first, second, first_length, second_length, current_index){
-    if(current_index < second_length){
+function multiply_sequence(first, second, first_length, second_length, current_index) {
+    if (current_index < second_length) {
         var multiplier = second[second_length - current_index - 1]
         var mutlipli = Number(multiplier * first)
         mutlipli = ("" + mutlipli).split('')
         mutlipli = mutlipli.join(" ")
-        if(multiplier == 0){
+        if (multiplier == 0) {
             mutlipli = '';
-            for(var li = 0; li < first_length; li++){
+            for (var li = 0; li < first_length; li++) {
                 mutlipli = mutlipli + ' ' + '0'
             }
         }
-        for(var i = 0; i < current_index; i++){
+        for (var i = 0; i < current_index; i++) {
             mutlipli = mutlipli + ' ' + '0'
         }
         $('#binary_simulation').append(mutlipli)
         $('#binary_simulation').append('<br> ')
-        
-        if(current_index == 0){
+
+        if (current_index == 0) {
             allmultiply_work = allmultiply_work + '' + mutlipli.split(" ").join("")
-        }else{
+        } else {
             allmultiply_work = allmultiply_work + '+' + mutlipli.split(" ").join("")
         }
 
-        setTimeout(function(){
+        setTimeout(function () {
             multiply_sequence(first, second, first_length, second_length, ++current_index)
         }, 3000)
-    }else{
+    } else {
         for (var fl = 0; fl < second_length; fl++) {
             $('#binary_simulation').append('--')
             $('#binary_simulation').append('--')
@@ -212,25 +213,25 @@ function multiply_sequence(first, second, first_length, second_length, current_i
     }
 }
 
-function multiply_add_end(){
+function multiply_add_end() {
     allmultiply_work = allmultiply_work.split('+')
     current_total = 0;
-    for(var am = 0; am < allmultiply_work.length; am++){
+    for (var am = 0; am < allmultiply_work.length; am++) {
         console.log(allmultiply_work)
         console.log(allmultiply_work[am])
-        console.log(allmultiply_work[Number(am+1)])
-        if(allmultiply_work[am+1] != undefined){
-            if(allmultiply_work[am].length < allmultiply_work[am+1].length){
-                total = addBinary(allmultiply_work[am], allmultiply_work[am+1])
-            }else{
-                total = addBinary(allmultiply_work[am+1], allmultiply_work[am])
+        console.log(allmultiply_work[Number(am + 1)])
+        if (allmultiply_work[am + 1] != undefined) {
+            if (allmultiply_work[am].length < allmultiply_work[am + 1].length) {
+                total = addBinary(allmultiply_work[am], allmultiply_work[am + 1])
+            } else {
+                total = addBinary(allmultiply_work[am + 1], allmultiply_work[am])
             }
-            if(current_total == 0){
+            if (current_total == 0) {
                 current_total = total
-            }else{
-                if(current_total.length < total.length){
+            } else {
+                if (current_total.length < total.length) {
                     current_total = addBinary(current_total, total)
-                }else{
+                } else {
                     current_total = addBinary(total, current_total)
                 }
             }
@@ -239,6 +240,29 @@ function multiply_add_end(){
     current_total = ("" + current_total).split('')
     current_total = current_total.join(" ")
     $('#binary_simulation').append(current_total)
+}
+
+function convert_denary(convert_value, base_from, base_to, convert_length, current_index) {
+    var current_check = Number(convert_value / base_to)
+    current_check = parseInt(current_check)
+    if ((current_check * base_to) == convert_value) {
+        passing = 0
+    } else {
+        passing = convert_value - (current_check * base_to)
+    }
+    binary_pass_out = passing + '' + binary_pass_out
+    $('#binary_simulation').append('<br>')
+    $('#binary_simulation').append(base_to + ' &nbsp;&nbsp; | &nbsp;&nbsp; ' + current_check + ' &nbsp;&nbsp;&nbsp;&nbsp; ' + passing)
+    if (current_check != 0) {
+        setTimeout(function () {
+            convert_denary(current_check, base_from, base_to, convert_length, 0)
+        }, 400)
+    } else {
+        $('#binary_simulation').append('<br>')
+        $('#binary_simulation').append('<br>')
+        $('#binary_simulation').append('<br>')
+        $('#binary_simulation').append(' = ' + binary_pass_out)
+    }
 }
 
 
@@ -254,6 +278,10 @@ $('document').ready(function () {
 
     $('#binary2').on('input', function (e) {
         e.target.value = e.target.value.replace(/[^0-1]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    })
+
+    $('#denary_to_binary').on('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '').replace(/(.{4})/g, '$1 ').trim();
     })
 
     $('#octa_to_denary').on('input', function (e) {
@@ -419,16 +447,16 @@ $('document').ready(function () {
                         $('#binary_simulation').append('--')
                     }
                     $('#binary_simulation').append('<br>')
-                    setTimeout(function(){
+                    setTimeout(function () {
                         multiply_sequence(binary1, binary2, binary1_length, binary2_length, 0)
                     }, 3000)
-                    
+
                 } else if (binary1_length < binary2_length) {
                     for (var fl = 0; fl < binary2_length; fl++) {
                         $('#binary_simulation').append('--')
                     }
                     $('#binary_simulation').append('<br>')
-                    setTimeout(function(){
+                    setTimeout(function () {
                         multiply_sequence(binary2, binary1, binary2_length, binary1_length, 0)
                     }, 3000)
                 }
@@ -484,6 +512,56 @@ $('document').ready(function () {
 
     })
 
+    $('#convert_denary_to_binary').on('click', function () {
+        var binary_value = $('#denary_to_binary').val()
+        var base_from = 10
+        var base_to = 2
+        var convert_length = binary_value.length
+
+        if (binary_value == '' || binary_value == NaN || binary_value == ' ') {
+            alert('Please Input Denary Numbers')
+        } else {
+
+            $('#denary_to_binary').attr('disabled', true)
+            $('#convert_denary_to_binary').attr('disabled', true)
+            $('#binary_simulation').html(base_to + '  |  ' + binary_value)
+            $('#binary_simulation').append('<br>')
+            $('#binary_simulation').append('---------------------')
+            $('#binary_simulation').append('<br>')
+            setTimeout(function () {
+                convert_denary(binary_value, base_from, base_to, convert_length, 0)
+            }, 400)
+
+        }
+
+        return false
+    })
+
+    $('#convert_denary_to_octa').on('click', function () {
+        var binary_value = $('#denary_to_octa').val()
+        var base_from = 10
+        var base_to = 8
+        var convert_length = binary_value.length
+
+        if (binary_value == '' || binary_value == NaN || binary_value == ' ') {
+            alert('Please Input Denary Numbers')
+        } else {
+
+            $('#denary_to_octa').attr('disabled', true)
+            $('#convert_denary_to_octa').attr('disabled', true)
+            $('#binary_simulation').html(base_to + '  |  ' + binary_value)
+            $('#binary_simulation').append('<br>')
+            $('#binary_simulation').append('---------------------')
+            $('#binary_simulation').append('<br>')
+            setTimeout(function () {
+                convert_denary(binary_value, base_from, base_to, convert_length, 0)
+            }, 400)
+
+        }
+
+        return false
+    })
+
     $('#Reset').on('click', function () {
         $('#convert_binary_to_denary').removeAttr('disabled')
         $('#binary_to_denary').val('')
@@ -505,6 +583,12 @@ $('document').ready(function () {
         $('#multiply_binary_numbers').removeAttr('disabled')
         $('#binary1').removeAttr('disabled')
         $('#binary2').removeAttr('disabled')
+        $('#convert_denary_to_binary').removeAttr('disabled')
+        $('#denary_to_binary').removeAttr('disabled')
+        $('#denary_to_binary').val('')
+        $('#convert_denary_to_octa').removeAttr('disabled')
+        $('#denary_to_octa').removeAttr('disabled')
+        $('#denary_to_octa').val('')
     })
 
 })
