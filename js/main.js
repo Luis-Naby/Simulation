@@ -216,27 +216,14 @@ function multiply_sequence(first, second, first_length, second_length, current_i
 function multiply_add_end() {
     allmultiply_work = allmultiply_work.split('+')
     current_total = 0;
-    for (var am = 0; am < allmultiply_work.length; am++) {
-        console.log(allmultiply_work)
-        console.log(allmultiply_work[am])
-        console.log(allmultiply_work[Number(am + 1)])
-        if (allmultiply_work[am + 1] != undefined) {
-            if (allmultiply_work[am].length < allmultiply_work[am + 1].length) {
-                total = addBinary(allmultiply_work[am], allmultiply_work[am + 1])
-            } else {
-                total = addBinary(allmultiply_work[am + 1], allmultiply_work[am])
-            }
-            if (current_total == 0) {
-                current_total = total
-            } else {
-                if (current_total.length < total.length) {
-                    current_total = addBinary(current_total, total)
-                } else {
-                    current_total = addBinary(total, current_total)
-                }
-            }
-        }
+
+    for (var cl = 0; cl < allmultiply_work.length; cl++) {
+        current_yes = allmultiply_work[cl]
+        binar1 = parseInt(current_yes, 2)
+        current_total = Number(current_total) + Number(binar1)
     }
+
+    current_total = current_total.toString(2)
     current_total = ("" + current_total).split('')
     current_total = current_total.join(" ")
     $('#binary_simulation').append(current_total)
@@ -335,14 +322,78 @@ $('document').ready(function () {
                         $('#binary_simulation').append('--')
                     }
                     $('#binary_simulation').append('<br>')
-                    Added_Binary = addBinary(binary1, binary2)
+                    // Added_Binary = addBinary(binary1, binary2)
                 } else if (binary1_length < binary2_length) {
                     for (var fl = 0; fl < binary2_length; fl++) {
                         $('#binary_simulation').append('--')
                     }
                     $('#binary_simulation').append('<br>')
-                    Added_Binary = addBinary(binary2, binary1)
+                    // Added_Binary = addBinary(binary2, binary1)
                 }
+                binar1 = parseInt(binary1, 2)
+                binar2 = parseInt(binary2, 2)
+                Added_Binary = Number(binar1) + Number(binar2)
+                Added_Binary = Added_Binary.toString(2)
+                Added_Binary = Added_Binary.split('')
+                Added_Binary = Added_Binary.join(" ")
+                $('#binary_simulation').append(Added_Binary)
+            }, 400)
+
+        }
+
+    })
+
+    $('#subtract_binary_numbers').on('click', function () {
+
+        var binary1 = $('#binary1').val()
+        var binary2 = $('#binary2').val()
+        var binary1_length = binary1.length
+        var binary2_length = binary2.length
+
+        if (binary1 == '' || binary1 == NaN || binary1 == ' ' || binary2 == '' || binary2 == NaN || binary2 == ' ') {
+            alert('Please Input Binary Numbers')
+        } else {
+
+            first = binary1.split('')
+            second = binary2.split('')
+
+            $('#binary_simulation').html('&nbsp;&nbsp;&nbsp;&nbsp;')
+
+            for (var fl = 0; fl < binary1_length; fl++) {
+                $('#binary_simulation').append(binary1[fl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br>+ ')
+
+            for (var sl = 0; sl < binary2_length; sl++) {
+                $('#binary_simulation').append(binary2[sl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br> ')
+
+
+            $('#subtract_binary_numbers').attr('disabled', true)
+            $('#binary1').attr('disabled', true)
+            $('#binary2').attr('disabled', true)
+            setTimeout(function () {
+                $('#binary_simulation').append('----')
+                if (binary1_length >= binary2_length) {
+                    for (var fl = 0; fl < binary1_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    // Added_Binary = addBinary(binary1, binary2)
+                } else if (binary1_length < binary2_length) {
+                    for (var fl = 0; fl < binary2_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    // Added_Binary = addBinary(binary2, binary1)
+                }
+                binar1 = parseInt(binary1, 2)
+                binar2 = parseInt(binary2, 2)
+                Added_Binary = Number(binar1) - Number(binar2)
+                Added_Binary = Added_Binary.toString(2)
                 Added_Binary = Added_Binary.split('')
                 Added_Binary = Added_Binary.join(" ")
                 $('#binary_simulation').append(Added_Binary)
@@ -391,14 +442,18 @@ $('document').ready(function () {
                         $('#binary_simulation').append('--')
                     }
                     $('#binary_simulation').append('<br>')
-                    Added_Binary = addBinary(binary1, binary2)
+                    // Added_Binary = addBinary(binary1, binary2)
                 } else if (binary1_length < binary2_length) {
                     for (var fl = 0; fl < binary2_length; fl++) {
                         $('#binary_simulation').append('--')
                     }
                     $('#binary_simulation').append('<br>')
-                    Added_Binary = addBinary(binary2, binary1)
+                    // Added_Binary = addBinary(binary2, binary1)
                 }
+                binar1 = parseInt(binary1, 8)
+                binar2 = parseInt(binary2, 8)
+                Added_Binary = Number(binar1) + Number(binar2)
+                Added_Binary = Added_Binary.toString(8)
                 Added_Binary = Added_Binary.split('')
                 Added_Binary = Added_Binary.join(" ")
                 $('#binary_simulation').append(Added_Binary)
@@ -581,12 +636,11 @@ $('document').ready(function () {
         $('#octal1').val('')
         $('#octal2').val('')
         $('#multiply_binary_numbers').removeAttr('disabled')
-        $('#binary1').removeAttr('disabled')
-        $('#binary2').removeAttr('disabled')
         $('#convert_denary_to_binary').removeAttr('disabled')
         $('#denary_to_binary').removeAttr('disabled')
         $('#denary_to_binary').val('')
         $('#convert_denary_to_octa').removeAttr('disabled')
+        $('#subtract_binary_numbers').removeAttr('disabled')
         $('#denary_to_octa').removeAttr('disabled')
         $('#denary_to_octa').val('')
     })
