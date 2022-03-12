@@ -463,6 +463,66 @@ $('document').ready(function () {
 
     })
 
+    $('#subtract_octa_numbers').on('click', function () {
+
+        var binary1 = $('#octal1').val()
+        var binary2 = $('#octal2').val()
+        var binary1_length = binary1.length
+        var binary2_length = binary2.length
+
+        if (binary1 == '' || binary1 == NaN || binary1 == ' ' || binary2 == '' || binary2 == NaN || binary2 == ' ') {
+            alert('Please Input Octa Numbers')
+        } else {
+
+            first = binary1.split('')
+            second = binary2.split('')
+
+            $('#binary_simulation').html('&nbsp;&nbsp;&nbsp;&nbsp;')
+
+            for (var fl = 0; fl < binary1_length; fl++) {
+                $('#binary_simulation').append(binary1[fl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br>+ ')
+
+            for (var sl = 0; sl < binary2_length; sl++) {
+                $('#binary_simulation').append(binary2[sl] + ' ')
+            }
+
+            $('#binary_simulation').append('<br> ')
+
+
+            $('#subtract_octa_numbers').attr('disabled', true)
+            $('#octal1').attr('disabled', true)
+            $('#octal2').attr('disabled', true)
+            setTimeout(function () {
+                $('#binary_simulation').append('----')
+                if (binary1_length >= binary2_length) {
+                    for (var fl = 0; fl < binary1_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    // Added_Binary = addBinary(binary1, binary2)
+                } else if (binary1_length < binary2_length) {
+                    for (var fl = 0; fl < binary2_length; fl++) {
+                        $('#binary_simulation').append('--')
+                    }
+                    $('#binary_simulation').append('<br>')
+                    // Added_Binary = addBinary(binary2, binary1)
+                }
+                binar1 = parseInt(binary1, 8)
+                binar2 = parseInt(binary2, 8)
+                Added_Binary = Number(binar1) - Number(binar2)
+                Added_Binary = Added_Binary.toString(8)
+                Added_Binary = Added_Binary.split('')
+                Added_Binary = Added_Binary.join(" ")
+                $('#binary_simulation').append(Added_Binary)
+            }, 400)
+
+        }
+
+    })
+
     $('#multiply_binary_numbers').on('click', function () {
 
         var binary1 = $('#binary1').val()
@@ -619,30 +679,34 @@ $('document').ready(function () {
 
     $('#Reset').on('click', function () {
         $('#convert_binary_to_denary').removeAttr('disabled')
-        $('#binary_to_denary').val('')
-        $('#binary_to_denary').removeAttr('disabled')
         $('#add_binary_numbers').removeAttr('disabled')
-        $('#binary1').removeAttr('disabled')
-        $('#binary2').removeAttr('disabled')
-        $('#binary1').val('')
-        $('#binary2').val('')
-        $('#binary_simulation').html('')
-        $('#convert_octa_to_denary').removeAttr('disabled')
-        $('#octa_to_denary').removeAttr('disabled')
-        $('#octa_to_denary').val('')
-        $('#add_octal_numbers').removeAttr('disabled')
-        $('#octal1').removeAttr('disabled')
-        $('#octal2').removeAttr('disabled')
-        $('#octal1').val('')
-        $('#octal2').val('')
-        $('#multiply_binary_numbers').removeAttr('disabled')
-        $('#convert_denary_to_binary').removeAttr('disabled')
-        $('#denary_to_binary').removeAttr('disabled')
-        $('#denary_to_binary').val('')
         $('#convert_denary_to_octa').removeAttr('disabled')
         $('#subtract_binary_numbers').removeAttr('disabled')
-        $('#denary_to_octa').removeAttr('disabled')
+        $('#subtract_octa_numbers').removeAttr('disabled')
+        $('#convert_octa_to_denary').removeAttr('disabled')
+        $('#add_octal_numbers').removeAttr('disabled')
+        $('#multiply_binary_numbers').removeAttr('disabled')
+        $('#convert_denary_to_binary').removeAttr('disabled')
+
+        $('#binary_simulation').html('')
+        $('#binary_to_denary').val('')
+        $('#binary1').val('')
+        $('#binary2').val('')
+        $('#octa_to_denary').val('')
+        $('#octal1').val('')
+        $('#octal2').val('')
+        $('#denary_to_binary').val('')
         $('#denary_to_octa').val('')
+
+        $('#binary_to_denary').removeAttr('disabled')
+        $('#binary1').removeAttr('disabled')
+        $('#binary2').removeAttr('disabled')
+        $('#octa_to_denary').removeAttr('disabled')
+        $('#octal1').removeAttr('disabled')
+        $('#octal2').removeAttr('disabled')
+        $('#denary_to_binary').removeAttr('disabled')
+        $('#denary_to_octa').removeAttr('disabled')
+
     })
 
 })

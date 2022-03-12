@@ -67,11 +67,6 @@ body main button {
     color: firebrick;
 }
 
-.link_flex a::after {
-    content: ' | ';
-    color: #ffffff;
-}
-
 .binary_conversion .input_form {
     width: 60%;
     padding: 10px;
